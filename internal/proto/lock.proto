@@ -8,6 +8,10 @@ service Readwriteservices {
   rpc Read (ReadRequest) returns (ReadResponse);
   rpc Write (WriteRequest) returns (WriteResponse);
 }
+service LockService {
+  rpc Ping (PingRequest) returns (PingResponse);
+  rpc Write (WriteRequest) returns (WriteResponse);
+}
 
 message ReadRequest {
   bool read = 1;
@@ -26,4 +30,14 @@ message WriteRequest{
 message WriteResponse{
   string result = 1;
   int64 updated_data = 2;
+}
+
+message WriteRequest {
+  string resource_id = 1;
+  string payload = 2;
+}
+
+message WriteResponse {
+  bool success = 1;
+  string message = 2;
 }
