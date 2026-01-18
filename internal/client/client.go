@@ -21,17 +21,32 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := pb.NewLockServiceClient(conn)
+	client := pb.NewReadwriteservicesClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	resp, err := client.Ping(ctx, &pb.PingRequest{
-		Message: "Hello from client",
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
+	var i int64
 
-	log.Println("Response:", resp.Message)
+	for i = 0; i < 5; i++ {
+		resp, err := client.Read(ctx, &pb.ReadRequest{
+			Read: true,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Println("Read Response:", resp.Result, resp.CurrData)
+
+		resp1, err1 := client.Write(ctx, &pb.WriteRequest{
+			Add: true,
+			Val: 100 * i,
+		})
+
+		if err1 != nil {
+			log.Fatal(err1)
+		}
+
+		log.Println("Write Response:", resp1.Result, resp1.UpdatedData)
+	}
 }

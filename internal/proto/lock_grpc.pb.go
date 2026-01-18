@@ -19,101 +19,139 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	LockService_Ping_FullMethodName = "/lockservice.LockService/Ping"
+	Readwriteservices_Read_FullMethodName  = "/readwriteservices.Readwriteservices/Read"
+	Readwriteservices_Write_FullMethodName = "/readwriteservices.Readwriteservices/Write"
 )
 
-// LockServiceClient is the client API for LockService service.
+// ReadwriteservicesClient is the client API for Readwriteservices service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type LockServiceClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+type ReadwriteservicesClient interface {
+	Read(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (*ReadResponse, error)
+	Write(ctx context.Context, in *WriteRequest, opts ...grpc.CallOption) (*WriteResponse, error)
 }
 
-type lockServiceClient struct {
+type readwriteservicesClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewLockServiceClient(cc grpc.ClientConnInterface) LockServiceClient {
-	return &lockServiceClient{cc}
+func NewReadwriteservicesClient(cc grpc.ClientConnInterface) ReadwriteservicesClient {
+	return &readwriteservicesClient{cc}
 }
 
-func (c *lockServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *readwriteservicesClient) Read(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (*ReadResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, LockService_Ping_FullMethodName, in, out, cOpts...)
+	out := new(ReadResponse)
+	err := c.cc.Invoke(ctx, Readwriteservices_Read_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// LockServiceServer is the server API for LockService service.
-// All implementations must embed UnimplementedLockServiceServer
-// for forward compatibility.
-type LockServiceServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
-	mustEmbedUnimplementedLockServiceServer()
+func (c *readwriteservicesClient) Write(ctx context.Context, in *WriteRequest, opts ...grpc.CallOption) (*WriteResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WriteResponse)
+	err := c.cc.Invoke(ctx, Readwriteservices_Write_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-// UnimplementedLockServiceServer must be embedded to have
+// ReadwriteservicesServer is the server API for Readwriteservices service.
+// All implementations must embed UnimplementedReadwriteservicesServer
+// for forward compatibility.
+type ReadwriteservicesServer interface {
+	Read(context.Context, *ReadRequest) (*ReadResponse, error)
+	Write(context.Context, *WriteRequest) (*WriteResponse, error)
+	mustEmbedUnimplementedReadwriteservicesServer()
+}
+
+// UnimplementedReadwriteservicesServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedLockServiceServer struct{}
+type UnimplementedReadwriteservicesServer struct{}
 
-func (UnimplementedLockServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedReadwriteservicesServer) Read(context.Context, *ReadRequest) (*ReadResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Read not implemented")
 }
-func (UnimplementedLockServiceServer) mustEmbedUnimplementedLockServiceServer() {}
-func (UnimplementedLockServiceServer) testEmbeddedByValue()                     {}
+func (UnimplementedReadwriteservicesServer) Write(context.Context, *WriteRequest) (*WriteResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Write not implemented")
+}
+func (UnimplementedReadwriteservicesServer) mustEmbedUnimplementedReadwriteservicesServer() {}
+func (UnimplementedReadwriteservicesServer) testEmbeddedByValue()                           {}
 
-// UnsafeLockServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to LockServiceServer will
+// UnsafeReadwriteservicesServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ReadwriteservicesServer will
 // result in compilation errors.
-type UnsafeLockServiceServer interface {
-	mustEmbedUnimplementedLockServiceServer()
+type UnsafeReadwriteservicesServer interface {
+	mustEmbedUnimplementedReadwriteservicesServer()
 }
 
-func RegisterLockServiceServer(s grpc.ServiceRegistrar, srv LockServiceServer) {
-	// If the following call panics, it indicates UnimplementedLockServiceServer was
+func RegisterReadwriteservicesServer(s grpc.ServiceRegistrar, srv ReadwriteservicesServer) {
+	// If the following call panics, it indicates UnimplementedReadwriteservicesServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&LockService_ServiceDesc, srv)
+	s.RegisterService(&Readwriteservices_ServiceDesc, srv)
 }
 
-func _LockService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Readwriteservices_Read_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LockServiceServer).Ping(ctx, in)
+		return srv.(ReadwriteservicesServer).Read(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LockService_Ping_FullMethodName,
+		FullMethod: Readwriteservices_Read_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LockServiceServer).Ping(ctx, req.(*PingRequest))
+		return srv.(ReadwriteservicesServer).Read(ctx, req.(*ReadRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// LockService_ServiceDesc is the grpc.ServiceDesc for LockService service.
+func _Readwriteservices_Write_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WriteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReadwriteservicesServer).Write(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Readwriteservices_Write_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReadwriteservicesServer).Write(ctx, req.(*WriteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Readwriteservices_ServiceDesc is the grpc.ServiceDesc for Readwriteservices service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var LockService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "lockservice.LockService",
-	HandlerType: (*LockServiceServer)(nil),
+var Readwriteservices_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "readwriteservices.Readwriteservices",
+	HandlerType: (*ReadwriteservicesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _LockService_Ping_Handler,
+			MethodName: "Read",
+			Handler:    _Readwriteservices_Read_Handler,
+		},
+		{
+			MethodName: "Write",
+			Handler:    _Readwriteservices_Write_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

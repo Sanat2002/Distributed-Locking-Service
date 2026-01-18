@@ -11,15 +11,29 @@ import (
 )
 
 type server struct {
-	pb.UnimplementedLockServiceServer
+	pb.ReadwriteservicesClient
+	pb.ReadwriteservicesServer
 }
 
-func (s *server) Ping(
+func (s *server) Read(
 	ctx context.Context,
-	req *pb.PingRequest,
-) (*pb.PingResponse, error) {
-	return &pb.PingResponse{
-		Message: "Server received: " + req.Message,
+	req *pb.ReadRequest,
+) (*pb.ReadResponse, error) {
+
+	return &pb.ReadResponse{
+		Result:   "OK",
+		CurrData: 200,
+	}, nil
+}
+
+func (s *server) Write(
+	ctx context.Context,
+	req *pb.WriteRequest,
+) (*pb.WriteResponse, error) {
+
+	return &pb.WriteResponse{
+		Result:      "OK",
+		UpdatedData: 100 + req.Val,
 	}, nil
 }
 
@@ -30,7 +44,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterLockServiceServer(grpcServer, &server{})
+	pb.RegisterReadwriteservicesServer(grpcServer, &server{})
 
 	log.Println("gRPC server listening on :50051")
 	grpcServer.Serve(lis)
