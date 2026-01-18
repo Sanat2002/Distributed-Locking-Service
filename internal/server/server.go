@@ -17,24 +17,45 @@ import (
 
 
 type server struct {
-	pb.UnimplementedLockServiceServer
 	lockManager *lock.Manager
+	pb.ReadwriteservicesClient
+	pb.ReadwriteservicesServer
 }
 
-func (s *server) Ping(
+func (s *server) Read(
 	ctx context.Context,
-	req *pb.PingRequest,
-) (*pb.PingResponse, error) {
-
-	// 1. Check Redis connectivity
+	req *pb.ReadRequest,
+) (*pb.ReadResponse, error) {
+  	// 1. Check Redis connectivity
 	if err := s.lockManager.HealthCheck(ctx); err != nil {
 		return nil, err
 	}
 	// 2. If we reached here:
 	// - gRPC is working
 	// - Redis is reachable
-	return &pb.PingResponse{
-		Message: "client->server OK, server->redis OK",
+
+	return &pb.ReadResponse{
+		Result:   "OK",
+		CurrData: 200,
+	}, nil
+}
+
+func (s *server) Write(
+	ctx context.Context,
+	req *pb.WriteRequest,
+) (*pb.WriteResponse, error) {
+  
+  	// 1. Check Redis connectivity
+	if err := s.lockManager.HealthCheck(ctx); err != nil {
+		return nil, err
+	}
+	// 2. If we reached here:
+	// - gRPC is working
+	// - Redis is reachable
+
+	return &pb.WriteResponse{
+		Result:      "OK",
+		UpdatedData: 100 + req.Val,
 	}, nil
 }
 
@@ -54,7 +75,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterLockServiceServer(grpcServer, srv)
+	pb.RegisterReadwriteservicesServer(grpcServer, &server{})
 
 	reflection.Register(grpcServer)
 	

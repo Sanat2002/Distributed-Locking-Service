@@ -21,27 +21,27 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type PingRequest struct {
+type ReadRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Read          bool                   `protobuf:"varint,1,opt,name=read,proto3" json:"read,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PingRequest) Reset() {
-	*x = PingRequest{}
+func (x *ReadRequest) Reset() {
+	*x = ReadRequest{}
 	mi := &file_internal_proto_lock_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PingRequest) String() string {
+func (x *ReadRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PingRequest) ProtoMessage() {}
+func (*ReadRequest) ProtoMessage() {}
 
-func (x *PingRequest) ProtoReflect() protoreflect.Message {
+func (x *ReadRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_internal_proto_lock_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,39 +53,40 @@ func (x *PingRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
-func (*PingRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReadRequest.ProtoReflect.Descriptor instead.
+func (*ReadRequest) Descriptor() ([]byte, []int) {
 	return file_internal_proto_lock_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *PingRequest) GetMessage() string {
+func (x *ReadRequest) GetRead() bool {
 	if x != nil {
-		return x.Message
+		return x.Read
 	}
-	return ""
+	return false
 }
 
-type PingResponse struct {
+type ReadResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Result        string                 `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	CurrData      int64                  `protobuf:"varint,2,opt,name=curr_data,json=currData,proto3" json:"curr_data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
+func (x *ReadResponse) Reset() {
+	*x = ReadResponse{}
 	mi := &file_internal_proto_lock_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PingResponse) String() string {
+func (x *ReadResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PingResponse) ProtoMessage() {}
+func (*ReadResponse) ProtoMessage() {}
 
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
+func (x *ReadResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_internal_proto_lock_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -97,29 +98,148 @@ func (x *PingResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReadResponse.ProtoReflect.Descriptor instead.
+func (*ReadResponse) Descriptor() ([]byte, []int) {
 	return file_internal_proto_lock_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *PingResponse) GetMessage() string {
+func (x *ReadResponse) GetResult() string {
 	if x != nil {
-		return x.Message
+		return x.Result
 	}
 	return ""
+}
+
+func (x *ReadResponse) GetCurrData() int64 {
+	if x != nil {
+		return x.CurrData
+	}
+	return 0
+}
+
+type WriteRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Add           bool                   `protobuf:"varint,1,opt,name=add,proto3" json:"add,omitempty"`
+	Val           int64                  `protobuf:"varint,2,opt,name=val,proto3" json:"val,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WriteRequest) Reset() {
+	*x = WriteRequest{}
+	mi := &file_internal_proto_lock_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WriteRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WriteRequest) ProtoMessage() {}
+
+func (x *WriteRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_proto_lock_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WriteRequest.ProtoReflect.Descriptor instead.
+func (*WriteRequest) Descriptor() ([]byte, []int) {
+	return file_internal_proto_lock_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *WriteRequest) GetAdd() bool {
+	if x != nil {
+		return x.Add
+	}
+	return false
+}
+
+func (x *WriteRequest) GetVal() int64 {
+	if x != nil {
+		return x.Val
+	}
+	return 0
+}
+
+type WriteResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Result        string                 `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	UpdatedData   int64                  `protobuf:"varint,2,opt,name=updated_data,json=updatedData,proto3" json:"updated_data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WriteResponse) Reset() {
+	*x = WriteResponse{}
+	mi := &file_internal_proto_lock_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WriteResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WriteResponse) ProtoMessage() {}
+
+func (x *WriteResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_proto_lock_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WriteResponse.ProtoReflect.Descriptor instead.
+func (*WriteResponse) Descriptor() ([]byte, []int) {
+	return file_internal_proto_lock_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *WriteResponse) GetResult() string {
+	if x != nil {
+		return x.Result
+	}
+	return ""
+}
+
+func (x *WriteResponse) GetUpdatedData() int64 {
+	if x != nil {
+		return x.UpdatedData
+	}
+	return 0
 }
 
 var File_internal_proto_lock_proto protoreflect.FileDescriptor
 
 const file_internal_proto_lock_proto_rawDesc = "" +
 	"\n" +
-	"\x19internal/proto/lock.proto\x12\vlockservice\"'\n" +
-	"\vPingRequest\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"(\n" +
-	"\fPingResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2J\n" +
-	"\vLockService\x12;\n" +
-	"\x04Ping\x12\x18.lockservice.PingRequest\x1a\x19.lockservice.PingResponseB\x16Z\x14internal/proto;protob\x06proto3"
+	"\x19internal/proto/lock.proto\x12\x11readwriteservices\"!\n" +
+	"\vReadRequest\x12\x12\n" +
+	"\x04read\x18\x01 \x01(\bR\x04read\"C\n" +
+	"\fReadResponse\x12\x16\n" +
+	"\x06result\x18\x01 \x01(\tR\x06result\x12\x1b\n" +
+	"\tcurr_data\x18\x02 \x01(\x03R\bcurrData\"2\n" +
+	"\fWriteRequest\x12\x10\n" +
+	"\x03add\x18\x01 \x01(\bR\x03add\x12\x10\n" +
+	"\x03val\x18\x02 \x01(\x03R\x03val\"J\n" +
+	"\rWriteResponse\x12\x16\n" +
+	"\x06result\x18\x01 \x01(\tR\x06result\x12!\n" +
+	"\fupdated_data\x18\x02 \x01(\x03R\vupdatedData2\xa8\x01\n" +
+	"\x11Readwriteservices\x12G\n" +
+	"\x04Read\x12\x1e.readwriteservices.ReadRequest\x1a\x1f.readwriteservices.ReadResponse\x12J\n" +
+	"\x05Write\x12\x1f.readwriteservices.WriteRequest\x1a .readwriteservices.WriteResponseB\x16Z\x14internal/proto;protob\x06proto3"
 
 var (
 	file_internal_proto_lock_proto_rawDescOnce sync.Once
@@ -133,16 +253,20 @@ func file_internal_proto_lock_proto_rawDescGZIP() []byte {
 	return file_internal_proto_lock_proto_rawDescData
 }
 
-var file_internal_proto_lock_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_internal_proto_lock_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_internal_proto_lock_proto_goTypes = []any{
-	(*PingRequest)(nil),  // 0: lockservice.PingRequest
-	(*PingResponse)(nil), // 1: lockservice.PingResponse
+	(*ReadRequest)(nil),   // 0: readwriteservices.ReadRequest
+	(*ReadResponse)(nil),  // 1: readwriteservices.ReadResponse
+	(*WriteRequest)(nil),  // 2: readwriteservices.WriteRequest
+	(*WriteResponse)(nil), // 3: readwriteservices.WriteResponse
 }
 var file_internal_proto_lock_proto_depIdxs = []int32{
-	0, // 0: lockservice.LockService.Ping:input_type -> lockservice.PingRequest
-	1, // 1: lockservice.LockService.Ping:output_type -> lockservice.PingResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: readwriteservices.Readwriteservices.Read:input_type -> readwriteservices.ReadRequest
+	2, // 1: readwriteservices.Readwriteservices.Write:input_type -> readwriteservices.WriteRequest
+	1, // 2: readwriteservices.Readwriteservices.Read:output_type -> readwriteservices.ReadResponse
+	3, // 3: readwriteservices.Readwriteservices.Write:output_type -> readwriteservices.WriteResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -159,7 +283,7 @@ func file_internal_proto_lock_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_proto_lock_proto_rawDesc), len(file_internal_proto_lock_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
