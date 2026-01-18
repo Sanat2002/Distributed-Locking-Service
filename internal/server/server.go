@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net"
+	"time"
 
 	"google.golang.org/grpc/reflection"
 
@@ -44,19 +45,53 @@ func (s *server) Write(
 	ctx context.Context,
 	req *pb.WriteRequest,
 ) (*pb.WriteResponse, error) {
-  
-  	// 1. Check Redis connectivity
-	if err := s.lockManager.HealthCheck(ctx); err != nil {
-		return nil, err
-	}
-	// 2. If we reached here:
-	// - gRPC is working
-	// - Redis is reachable
 
+	log.Println("[WRITE] request received",
+		"resource:", req.ResourceId,
+		"value:", req.Val,
+	)
+  
+	token, err := s.lockManager.Acquire(
+		ctx,
+		req.ResourceId,
+		5*time.Second,
+	)
+	if err != nil {
+		log.Println("[WRITE] lock acquisition failed:", err)
+		return &pb.WriteResponse{
+			Result: "LOCK_BUSY",
+		}, nil
+	}
+
+	log.Println("[WRITE] lock acquired",
+		"resource:", req.ResourceId,
+		"token:", token,
+	)
+
+	updated := 100 + req.Val
+	log.Println("[WRITE] write executed",
+		"resource:", req.ResourceId,
+		"updated_value:", updated,
+	)
+
+	// STEP 3: Return success
 	return &pb.WriteResponse{
 		Result:      "OK",
-		UpdatedData: 100 + req.Val,
+		UpdatedData: updated,
 	}, nil
+
+	// // 1. Check Redis connectivity
+	// if err := s.lockManager.HealthCheck(ctx); err != nil {
+	// 	return nil, err
+	// }
+	// // 2. If we reached here:
+	// // - gRPC is working
+	// // - Redis is reachable
+	
+	// return &pb.WriteResponse{
+	// 	Result:      "OK",
+	// 	UpdatedData: 100 + req.Val,
+	// 	}, nil
 }
 
 
@@ -69,16 +104,18 @@ func main() {
 	srv := &server{
 		lockManager: lockManager,
 	}
+
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterReadwriteservicesServer(grpcServer, &server{})
+
+	pb.RegisterReadwriteservicesServer(grpcServer, srv)
 
 	reflection.Register(grpcServer)
-	
+
 	log.Println("gRPC server listening on :50051")
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatal(err)

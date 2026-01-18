@@ -39,7 +39,7 @@ func main() {
 		log.Println("Read Response:", resp.Result, resp.CurrData)
 
 		resp1, err1 := client.Write(ctx, &pb.WriteRequest{
-			Add: true,
+			ResourceId: "user:1",
 			Val: 100 * i,
 		})
 

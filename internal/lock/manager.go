@@ -21,6 +21,9 @@ func NewManager(redis *rds.Client) *Manager {
 		nodeID: uuid.NewString(),
 	}
 }
+func (m *Manager) HealthCheck(ctx context.Context) error {
+	return m.redis.RDB.Ping(ctx).Err()
+}
 
 func (m *Manager) Acquire(
 	ctx context.Context,
@@ -45,20 +48,13 @@ func (m *Manager) Acquire(
 	).Result()
 
 	if err != nil {
-		log.Println("[LOCK] redis error:", err)
 		return 0, err
 	}
 
 	values := result.([]interface{})
-	granted := values[0].(int64)
-
-	if granted == 0 {
-		log.Println("[LOCK] lock busy")
+	if values[0].(int64) == 0 {
 		return 0, fmt.Errorf("lock busy")
 	}
 
-	token := values[1].(int64)
-	log.Println("[LOCK] lock granted, token:", token)
-
-	return token, nil
+	return values[1].(int64), nil
 }
