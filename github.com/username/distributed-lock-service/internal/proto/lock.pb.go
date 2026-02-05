@@ -313,7 +313,7 @@ var File_internal_proto_lock_proto protoreflect.FileDescriptor
 
 const file_internal_proto_lock_proto_rawDesc = "" +
 	"\n" +
-	"\x19internal/proto/lock.proto\x12\x11readwriteservices\"'\n" +
+	"\x19internal/proto/lock.proto\x12\vlockservice\"'\n" +
 	"\vPingRequest\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage\"(\n" +
 	"\fPingResponse\x12\x18\n" +
@@ -329,13 +329,11 @@ const file_internal_proto_lock_proto_rawDesc = "" +
 	"\x03val\x18\x02 \x01(\x03R\x03val\"J\n" +
 	"\rWriteResponse\x12\x16\n" +
 	"\x06result\x18\x01 \x01(\tR\x06result\x12!\n" +
-	"\fupdated_data\x18\x02 \x01(\x03R\vupdatedData2\xa8\x01\n" +
-	"\x11Readwriteservices\x12G\n" +
-	"\x04Read\x12\x1e.readwriteservices.ReadRequest\x1a\x1f.readwriteservices.ReadResponse\x12J\n" +
-	"\x05Write\x12\x1f.readwriteservices.WriteRequest\x1a .readwriteservices.WriteResponse2\xa2\x01\n" +
-	"\vLockService\x12G\n" +
-	"\x04Ping\x12\x1e.readwriteservices.PingRequest\x1a\x1f.readwriteservices.PingResponse\x12J\n" +
-	"\x05Write\x12\x1f.readwriteservices.WriteRequest\x1a .readwriteservices.WriteResponseB\x16Z\x14internal/proto;protob\x06proto3"
+	"\fupdated_data\x18\x02 \x01(\x03R\vupdatedData2\xc7\x01\n" +
+	"\vLockService\x12;\n" +
+	"\x04Ping\x12\x18.lockservice.PingRequest\x1a\x19.lockservice.PingResponse\x12;\n" +
+	"\x04Read\x12\x18.lockservice.ReadRequest\x1a\x19.lockservice.ReadResponse\x12>\n" +
+	"\x05Write\x12\x19.lockservice.WriteRequest\x1a\x1a.lockservice.WriteResponseBCZAgithub.com/username/distributed-lock-service/internal/proto;protob\x06proto3"
 
 var (
 	file_internal_proto_lock_proto_rawDescOnce sync.Once
@@ -351,24 +349,22 @@ func file_internal_proto_lock_proto_rawDescGZIP() []byte {
 
 var file_internal_proto_lock_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_internal_proto_lock_proto_goTypes = []any{
-	(*PingRequest)(nil),   // 0: readwriteservices.PingRequest
-	(*PingResponse)(nil),  // 1: readwriteservices.PingResponse
-	(*ReadRequest)(nil),   // 2: readwriteservices.ReadRequest
-	(*ReadResponse)(nil),  // 3: readwriteservices.ReadResponse
-	(*WriteRequest)(nil),  // 4: readwriteservices.WriteRequest
-	(*WriteResponse)(nil), // 5: readwriteservices.WriteResponse
+	(*PingRequest)(nil),   // 0: lockservice.PingRequest
+	(*PingResponse)(nil),  // 1: lockservice.PingResponse
+	(*ReadRequest)(nil),   // 2: lockservice.ReadRequest
+	(*ReadResponse)(nil),  // 3: lockservice.ReadResponse
+	(*WriteRequest)(nil),  // 4: lockservice.WriteRequest
+	(*WriteResponse)(nil), // 5: lockservice.WriteResponse
 }
 var file_internal_proto_lock_proto_depIdxs = []int32{
-	2, // 0: readwriteservices.Readwriteservices.Read:input_type -> readwriteservices.ReadRequest
-	4, // 1: readwriteservices.Readwriteservices.Write:input_type -> readwriteservices.WriteRequest
-	0, // 2: readwriteservices.LockService.Ping:input_type -> readwriteservices.PingRequest
-	4, // 3: readwriteservices.LockService.Write:input_type -> readwriteservices.WriteRequest
-	3, // 4: readwriteservices.Readwriteservices.Read:output_type -> readwriteservices.ReadResponse
-	5, // 5: readwriteservices.Readwriteservices.Write:output_type -> readwriteservices.WriteResponse
-	1, // 6: readwriteservices.LockService.Ping:output_type -> readwriteservices.PingResponse
-	5, // 7: readwriteservices.LockService.Write:output_type -> readwriteservices.WriteResponse
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
+	0, // 0: lockservice.LockService.Ping:input_type -> lockservice.PingRequest
+	2, // 1: lockservice.LockService.Read:input_type -> lockservice.ReadRequest
+	4, // 2: lockservice.LockService.Write:input_type -> lockservice.WriteRequest
+	1, // 3: lockservice.LockService.Ping:output_type -> lockservice.PingResponse
+	3, // 4: lockservice.LockService.Read:output_type -> lockservice.ReadResponse
+	5, // 5: lockservice.LockService.Write:output_type -> lockservice.WriteResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -387,7 +383,7 @@ func file_internal_proto_lock_proto_init() {
 			NumEnums:      0,
 			NumMessages:   6,
 			NumExtensions: 0,
-			NumServices:   2,
+			NumServices:   1,
 		},
 		GoTypes:           file_internal_proto_lock_proto_goTypes,
 		DependencyIndexes: file_internal_proto_lock_proto_depIdxs,
