@@ -10,6 +10,7 @@ import (
 // Client is a thin wrapper around go-redis client
 type Client struct {
 	RDB *goredis.Client
+	Scripts *Scripts
 }
 
 // NewClient connects to Redis and fails fast if unavailable
@@ -30,5 +31,6 @@ func NewClient(addr string) *Client {
 
 	return &Client{
 		RDB: rdb,
+		Scripts: LoadScripts(),
 	}
 }

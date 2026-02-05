@@ -3,6 +3,7 @@ module github.com/username/distributed-lock-service
 go 1.25.5
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/redis/go-redis/v9 v9.17.2
 	google.golang.org/grpc v1.78.0
 	google.golang.org/protobuf v1.36.11
